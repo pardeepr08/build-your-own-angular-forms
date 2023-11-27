@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'build-angular-forms';
+  fname = 'pardeep'
+  lname = 'rana'
+  hasPassport = true
+  gender = ''
 }
