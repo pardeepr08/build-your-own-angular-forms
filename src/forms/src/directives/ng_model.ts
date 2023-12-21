@@ -1,4 +1,5 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from './control_value_accessor';
 
 
 @Directive({
@@ -8,15 +9,25 @@ import { Directive, ElementRef, EventEmitter, HostListener, Inject, Input, OnCha
 export class NgModel implements OnChanges {
   @Input('ngModel') model: any
   @Output('ngModelChange') update = new EventEmitter()
+  valueAccessor: ControlValueAccessor;
+  registerd: boolean = false;
 
-  constructor(private _elementRef: ElementRef) {}
-
-  ngOnChanges(changes: SimpleChanges): void {    
-    this._elementRef.nativeElement.checked = this.model
+  constructor(@Inject(NG_VALUE_ACCESSOR) valueAccessor: ControlValueAccessor) {
+    this.valueAccessor = valueAccessor;
   }
 
-
-  @HostListener("change", ["$event.target.checked"]) onInput(value: any) {
-    this.update.emit(value)
+  ngOnChanges(changes: SimpleChanges): void {
+    this.valueAccessor.writeValue(this.model);
+    if (!this.registerd) {
+      this.setUpViewChangePipeLine();
+    }
   }
+
+  setUpViewChangePipeLine() {
+    this.valueAccessor.registerOnChange((value: string) => {
+      this.update.emit(value);
+    });
+    this.registerd = true;
+  }
+
  }
