@@ -1,15 +1,21 @@
 <div class="container mt-3">
   <h3 class="mb-5">ngModel directive</h3>
   <form>
-    <div class="mb-3">
+    <div class="mb-4">
       <label for="fname" class="form-label">First Name</label>
       <input type="text" class="form-control" id="fname" name="fname" [ngModel]="fname" (ngModelChange)="fname=$event" />
     </div>
-    <div class="mb-3">
+    <div class="mb-4">
       <label for="lname" class="form-label">Last Name</label>
       <input type="text" class="form-control" name="lname" id="lname" [(ngModel)]="lname" />
     </div>
-    <div class="mb-3 form-check">
+    <div class="mb-4">
+      <label for="gender" class="form-label">Gender</label>
+      <select name="gender" id="gender" class="form-select" [(ngModel)]="selectedGender.name">
+        <option *ngFor="let gender of genders" [value]="gender.name">{{gender.name}}</option>
+      </select>
+    </div>
+    <div class="mb-4 form-check">
       <label for="passport" class="form-check-label">I have passport</label>
       <input type="checkbox" class="form-check-input" name="passport" id="passport" [(ngModel)]="hasPassport" />
     </div>
@@ -20,5 +26,6 @@
     <p><b>First name</b> - {{fname}}</p>
     <p><b>Last name</b> - {{lname}}</p>
     <p><b>Has passport</b> - {{hasPassport}}</p>
+    <p><b>Gender</b> - {{selectedGender | json}}</p>
   </div>
 </div>
