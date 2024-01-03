@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, Input, Provider, Renderer2, forwardRef } from "@angular/core";
+import { Directive, ElementRef, HostListener, Input, OnDestroy, Optional, Provider, Renderer2, forwardRef } from "@angular/core";
 import { BaseControlValueAccessor, ControlValueAccessor, NG_VALUE_ACCESSOR } from "./control_value_accessor";
 
 function _buildValueString(id: string|null, value: any) {
@@ -16,7 +16,7 @@ const SELECT_VALUE_ACCESSOR: Provider  = {
 }
 
 @Directive({
-    selector: "select[ngModel]",
+    selector: "select:not([multiple])[ngModel]",
     providers: [SELECT_VALUE_ACCESSOR],
     host: {
         "(change)": "onChange($event.target.value)"
@@ -67,14 +67,18 @@ export class SelectControlValueAccessor extends BaseControlValueAccessor impleme
 @Directive({
   selector: 'option',
 })
-export class NgOption {
-    id: string;
+export class NgSelectOption implements OnDestroy {
+    id!: string;
 
-    constructor(private renderer: Renderer2, private elementRef: ElementRef, private _select: SelectControlValueAccessor) {
-        this.id = this._select._registerOption();
+    constructor(private renderer: Renderer2, private elementRef: ElementRef, @Optional() private _select: SelectControlValueAccessor) {
+        if (this._select) {
+            this.id = this._select._registerOption();
+        }
     }
+    
 
     @Input() set ngValue(value: any) {
+        if (!this._select) return;
         this._select._optionMap.set(this.id, value);
         const valueString = _buildValueString(this.id, value);
         this._setElementValue(valueString);
@@ -84,11 +88,21 @@ export class NgOption {
 
     @Input() set value(value: string) {
         this._setElementValue(value);
-        this._select.writeValue(this._select.value);
+        if (this._select) {
+            this._select.writeValue(this._select.value);
+        }
     }
 
 
     _setElementValue(value: any): void {
         this.renderer.setProperty(this.elementRef.nativeElement, "value", value);
     }
+
+    ngOnDestroy(): void {
+        if (this._select) {
+            this._select._optionMap.delete(this.id);
+            this._select.writeValue(this._select.value);
+        }
+    }
+
 }

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { NgModel } from './src/directives/ng_model';
 import { DefaultControlValueAccessor } from './src/directives/default_value_accessor';
 import { CheckboxControlValueAccessor } from './src/directives/checkbox_value_accessor';
-import { NgOption, SelectControlValueAccessor } from './src/directives/select_control_value_accessor';
+import { NgSelectOption, SelectControlValueAccessor } from './src/directives/select_control_value_accessor';
 
 @NgModule({
   declarations: [
@@ -10,14 +10,14 @@ import { NgOption, SelectControlValueAccessor } from './src/directives/select_co
     DefaultControlValueAccessor,
     CheckboxControlValueAccessor,
     SelectControlValueAccessor,
-    NgOption
+    NgSelectOption
   ],
   exports: [
     NgModel,
     DefaultControlValueAccessor,
     CheckboxControlValueAccessor,
     SelectControlValueAccessor,
-    NgOption
+    NgSelectOption
   ]
 })
 export class FormsModule { }
