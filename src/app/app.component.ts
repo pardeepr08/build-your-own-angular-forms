@@ -15,23 +15,50 @@ export class AppComponent {
       name: 'Male',
       abbrev: 'M',
     },
-   {
+    {
       name: 'Female',
       abbrev: 'F',
-    }, 
+    },
     {
       name: 'Other',
       abbrev: 'O',
     },
   ];
 
-  selectedGender =  {
-    name: 'Other',
-    abbrev: 'O',
-  }
+  selectedGender = {
+    name: 'Female',
+    abbrev: 'F',
+  };
+
+  languages = [
+    {
+      name: 'English',
+      abbrev: 'en',
+    },
+    {
+      name: 'French',
+      abbrev: 'fr',
+    },
+    {
+      name: 'Russian',
+      abbrev: 'rs',
+    },
+  ];
+
+  //languagesKnown = ["English", "Russian"];
+
+  languagesKnown = [
+    {
+      name: 'French',
+      abbrev: 'fr',
+    },
+    {
+      name: 'Russian',
+      abbrev: 'rs',
+    }
+  ];
 
   compareFn(o1: any, o2: any): boolean {
-    return o1.name === o2.name;
+    return o1?.name === o2?.name;
   }
-
 }
