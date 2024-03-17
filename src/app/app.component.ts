@@ -25,10 +25,7 @@ export class AppComponent {
     },
   ];
 
-  selectedGender = {
-    name: 'Female',
-    abbrev: 'F',
-  };
+  selectedGender = 'Female';
 
   languages = [
     {
@@ -61,4 +58,6 @@ export class AppComponent {
   compareFn(o1: any, o2: any): boolean {
     return o1?.name === o2?.name;
   }
+
+  count = 5;
 }

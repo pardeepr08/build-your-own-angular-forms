@@ -25,6 +25,10 @@
       <label for="passport" class="form-check-label">I have passport</label>
       <input type="checkbox" class="form-check-input" name="passport" id="passport" [(ngModel)]="hasPassport" />
     </div>
+    <div class="mb-4">
+      <label for="count" class="form-label">Count</label>
+      <app-counter [(ngModel)]="count"></app-counter>
+    </div>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
   <hr class="border border-primary border-1 opacity-75 mt-5">
@@ -34,5 +38,6 @@
     <p><b>Has passport</b> - {{hasPassport}}</p>
     <p><b>Gender</b> - {{selectedGender | json }}</p>
     <p><b>Languages</b> - {{languagesKnown | json}}</p>
+    <p><b>Count</b> - {{count}}</p>
   </div>
 </div>
