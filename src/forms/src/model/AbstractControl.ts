@@ -1,10 +1,7 @@
+import { ValidationErrors, ValidatorFn } from "../directives/validators";
+
 export type FormControlStatus = 'VALID'|'INVALID'
-export type ValidationErrors = {
-    [key: string]: any
-}
-export interface ValidatorFn {
-    (control: AbstractControl): ValidationErrors|null
-}
+
 
 export const VALID = 'VALID';
 export const INVALID = 'INVALID';

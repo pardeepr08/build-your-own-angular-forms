@@ -3,11 +3,13 @@
   <form>
     <div class="mb-4">
       <label for="fname" class="form-label">First Name</label>
-      <input type="text" class="form-control" id="fname" name="fname" [ngModel]="fname" (ngModelChange)="fname=$event" />
+      <input type="text" #fnameCtrl="ngModel" [ngClass]="{error: fnameCtrl.invalid}" class="form-control" required id="fname" name="fname" [ngModel]="fname" (ngModelChange)="fname=$event" />
+      <span class="error" *ngIf="fnameCtrl.errors?.['required']">Please provide first name</span>
     </div>
     <div class="mb-4">
       <label for="lname" class="form-label">Last Name</label>
-      <input type="text" class="form-control" name="lname" id="lname" [(ngModel)]="lname" />
+      <input type="text" #lnameCtrl="ngModel" [ngClass]="{error: lnameCtrl.invalid}" class="form-control" required name="lname" id="lname" [(ngModel)]="lname" />
+      <span class="error" *ngIf="lnameCtrl.errors?.['required']">Please provide last name</span>
     </div>
     <div class="mb-4">
       <label for="gender" class="form-label">Gender</label>

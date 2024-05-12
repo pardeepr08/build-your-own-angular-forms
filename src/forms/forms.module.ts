@@ -4,6 +4,7 @@ import { DefaultControlValueAccessor } from './src/directives/default_value_acce
 import { CheckboxControlValueAccessor } from './src/directives/checkbox_value_accessor';
 import { NgSelectOption, SelectControlValueAccessor } from './src/directives/select_control_value_accessor';
 import { NgSelectMultipleOption, SelectMultipleControlValueAccessor } from './src/directives/select_multiple_control_value_accessor';
+import { RequiredValidator } from './src/directives/validators';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { NgSelectMultipleOption, SelectMultipleControlValueAccessor } from './sr
     SelectControlValueAccessor,
     NgSelectOption,
     SelectMultipleControlValueAccessor,
-    NgSelectMultipleOption
+    NgSelectMultipleOption,
+    RequiredValidator
   ],
   exports: [
     NgModel,
@@ -22,7 +24,8 @@ import { NgSelectMultipleOption, SelectMultipleControlValueAccessor } from './sr
     SelectControlValueAccessor,
     NgSelectOption,
     SelectMultipleControlValueAccessor,
-    NgSelectMultipleOption
+    NgSelectMultipleOption,
+    RequiredValidator
   ]
 })
 export class FormsModule { }
