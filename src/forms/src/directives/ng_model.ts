@@ -2,7 +2,7 @@ import { Directive, ElementRef, EventEmitter, HostListener, Inject, Input, OnCha
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from './control_value_accessor';
 import { FormControl } from '../model/FormControl';
 import { AbstractControl, INVALID } from '../model/AbstractControl';
-import { ValidatorFn, ValidationErrors, Validator, NG_VALIDATOR } from './validators';
+import { ValidatorFn, ValidationErrors, Validator, NG_VALIDATORS } from './validators';
 
 
 @Directive({
@@ -15,12 +15,12 @@ export class NgModel implements OnChanges {
   @Input('ngModel') model: any
   @Output('ngModelChange') update = new EventEmitter()
   valueAccessor: ControlValueAccessor;
-  validator: Validator;
+  _composedValidatorFn: ValidatorFn|null = null;
   registerd: boolean = false;
 
-  constructor(@Inject(NG_VALUE_ACCESSOR) valueAccessor: ControlValueAccessor, @Inject(NG_VALIDATOR) @Optional() validator: Validator) {
+  constructor(@Inject(NG_VALUE_ACCESSOR) valueAccessor: ControlValueAccessor, @Inject(NG_VALIDATORS) @Optional() validators: Validator[]|null) {
     this.valueAccessor = valueAccessor;
-    this.validator = validator;
+    this._setValidator(validators);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -29,6 +29,19 @@ export class NgModel implements OnChanges {
       this.setUpFormControl();
     }
     this.updateValue(this.model);
+  }
+
+  _setValidator(validators: Validator[]|null) {
+    if (validators) {
+      this._composedValidatorFn = (control: AbstractControl): ValidationErrors|null => {
+        const errors = validators.map((validator: Validator) => {
+          return validator.validate(control);
+        })
+        return errors.reduce((acc, err) => {
+          return {...acc, ...err}
+        }, {})
+      }
+    }
   }
 
   setUpViewChangePipeLine() {
@@ -40,11 +53,8 @@ export class NgModel implements OnChanges {
   }
 
   setUpFormControl() {
-    if (this.validator) {
-      const validatorFn: ValidatorFn = (control: AbstractControl): ValidationErrors|null => {
-        return this.validator.validate(control)
-      }
-      this.control.setValidator(validatorFn);
+    if (this._composedValidatorFn) {
+      this.control.setValidator(this._composedValidatorFn);
     }
   }
 

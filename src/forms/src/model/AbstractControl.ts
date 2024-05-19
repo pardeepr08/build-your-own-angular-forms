@@ -18,7 +18,7 @@ export abstract class AbstractControl<TValue = any> {
     }
 
     private _calculateStatus(): FormControlStatus {
-        return this.errors ? INVALID : VALID
+        return this.errors && Object.keys(this.errors).length ? INVALID : VALID
     }
 
     setValidator(fn: ValidatorFn) {
