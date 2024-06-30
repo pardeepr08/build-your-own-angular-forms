@@ -3,13 +3,13 @@
   <form>
     <div class="mb-4">
       <label for="fname" class="form-label">First Name</label>
-      <input type="text" #fnameCtrl="ngModel" [ngClass]="{error: fnameCtrl.invalid}" class="form-control" required minlength="3" id="fname" name="fname" [ngModel]="fname" (ngModelChange)="fname=$event" />
+      <input type="text" #fnameCtrl="ngModel" [ngClass]="{error: fnameCtrl.invalid}" class="form-control" required=true minlength="3" id="fname" name="fname" [ngModel]="fname" (ngModelChange)="fname=$event" />
       <div class="text-danger" *ngIf="fnameCtrl.errors?.['required']">Please provide first name</div>
       <div class="text-danger" *ngIf="fnameCtrl.errors?.['minlength']">Please enter at least {{fnameCtrl.errors?.['minlength'].requiredLength}} characters</div>
     </div>
     <div class="mb-4">
       <label for="lname" class="form-label">Last Name</label>
-      <input type="text" #lnameCtrl="ngModel" [ngClass]="{error: lnameCtrl.invalid}" class="form-control" required minlength="2" name="lname" id="lname" [(ngModel)]="lname" />
+      <input type="text" #lnameCtrl="ngModel" [ngClass]="{error: lnameCtrl.invalid}" class="form-control" required minlength=3 name="lname" id="lname" [(ngModel)]="lname" />
       <div class="text-danger" *ngIf="lnameCtrl.errors?.['required']">Please provide last name</div>
       <div class="text-danger" *ngIf="lnameCtrl.errors?.['minlength']">Please enter at least {{lnameCtrl.errors?.['minlength'].requiredLength}} characters</div>
     </div>
