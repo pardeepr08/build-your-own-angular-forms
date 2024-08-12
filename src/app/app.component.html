@@ -3,9 +3,24 @@
   <form>
     <div class="mb-4">
       <label for="fname" class="form-label">First Name</label>
-      <input type="text" #fnameCtrl="ngModel" [ngClass]="{error: fnameCtrl.invalid}" class="form-control" required=true minlength="3" id="fname" name="fname" [ngModel]="fname" (ngModelChange)="fname=$event" />
+      <input type="text"
+        #fnameCtrl="ngModel" 
+        [ngClass]="{error: fnameCtrl.invalid}" 
+        class="form-control" 
+        required=true 
+        minlength="3" 
+        forbiddenNames
+        forbiddenNames2
+        id="fname" 
+        name="fname" 
+        [ngModel]="fname" 
+        (ngModelChange)="fname=$event" 
+      />
+      <div class="text-warning" *ngIf="fnameCtrl.pending">Validating name...</div>
       <div class="text-danger" *ngIf="fnameCtrl.errors?.['required']">Please provide first name</div>
       <div class="text-danger" *ngIf="fnameCtrl.errors?.['minlength']">Please enter at least {{fnameCtrl.errors?.['minlength'].requiredLength}} characters</div>
+      <div class="text-danger" *ngIf="fnameCtrl.errors?.['forbiddenNames']">This name is not allowed</div>
+      <div class="text-danger" *ngIf="fnameCtrl.errors?.['forbiddenNames2']">This name is not allowed</div>
     </div>
     <div class="mb-4">
       <label for="lname" class="form-label">Last Name</label>

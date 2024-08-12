@@ -2,14 +2,16 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppComponent, ForbiddenNames, ForbiddenNames2 } from './app.component';
 import { FormsModule } from 'src/forms/forms.module';
 import { CounterComponent } from './counter/counter.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CounterComponent
+    CounterComponent,
+    ForbiddenNames,
+    ForbiddenNames2
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,7 @@
 import { Directive, InjectionToken, Input, OnChanges, SimpleChanges } from "@angular/core"
 import { AbstractControl } from "../model/AbstractControl"
+import { Observable } from "rxjs"
+import { nullValidator, requiredValidator, toBool, minlengthValidator, toInteger } from "src/forms/validators"
 
 export type ValidationErrors = {
     [key: string]: any
@@ -8,47 +10,24 @@ export interface ValidatorFn {
     (control: AbstractControl): ValidationErrors|null
 }
 
+export interface AsyncValidatorFn {
+    (control: AbstractControl): Promise<ValidationErrors|null> | Observable<ValidationErrors|null>
+}
+
+export interface AsyncValidatorFn {
+    (control: AbstractControl): Promise<ValidationErrors|null> | Observable<ValidationErrors|null>
+}
 
 export interface Validator {
     validate(control: AbstractControl): ValidationErrors|null
 }
 
+export interface AsyncValidator {
+    validate(control: AbstractControl): Promise<ValidationErrors|null> | Observable<ValidationErrors|null>
+}
 export const NG_VALIDATORS: InjectionToken<Validator> = new InjectionToken("NG_VALIDATOR")
 
-export function nullValidator(control: AbstractControl): null {
-    return null;
-}
-
-export function toBool(input: string|boolean): boolean {
-    return typeof input === "boolean" ? input : input !== null && input !== "false";
-}
-
-export function toInteger(input: string|number): number {
-    return typeof input === "number" ? input : parseInt(input, 10);
-}
-
-export function requiredValidator(input: boolean): ValidatorFn {
-    if (input) {
-        return (control: AbstractControl): ValidationErrors|null => {
-            return control.value ? null : { required: true }
-        }
-    }
-    return nullValidator
-}
-
-export function minlengthValidator(minlength: number): ValidatorFn {
-   return (control: AbstractControl): ValidationErrors|null => {
-    if (control.value.length < minlength) {
-        return {
-          minlength: {
-            actualLength: control.value.length,
-            requiredLength: minlength,
-          },
-        };
-    }
-    return null;
-   }
-}
+export const NG_ASYNC_VALIDATORS: InjectionToken<AsyncValidator> = new InjectionToken("NG_ASYNC_VALIDATOR")
 
 @Directive()
 export abstract class AbstractValidatorDirective  implements Validator, OnChanges {

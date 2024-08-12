@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Directive } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AsyncValidator, NG_ASYNC_VALIDATORS, ValidationErrors } from 'src/forms/src/directives/validators';
+import { AbstractControl } from 'src/forms/src/model/AbstractControl';
 
 @Component({
   selector: 'app-root',
@@ -60,4 +63,50 @@ export class AppComponent {
   }
 
   count = 5;
+}
+
+
+@Directive({
+  selector: '[forbiddenNames]',
+  providers: [{
+    provide: NG_ASYNC_VALIDATORS,
+    useExisting: ForbiddenNames,
+    multi: true
+  }]
+})
+export class ForbiddenNames implements AsyncValidator {
+  validate(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        if (control.value === 'tom') {
+          return resolve({ forbiddenNames: true });
+        }
+        return resolve(null);
+      }, 2000)
+    })
+  }
+}
+
+@Directive({
+  selector: '[forbiddenNames2]',
+  providers: [{
+    provide: NG_ASYNC_VALIDATORS,
+    useExisting: ForbiddenNames2,
+    multi: true
+  }]
+})
+export class ForbiddenNames2 implements AsyncValidator {
+  validate(control: AbstractControl): Observable<ValidationErrors | null> {
+    return new Observable(observer => {
+      setTimeout(() => {
+        if (control.value === 'harry') {
+          observer.next({ forbiddenNames2: true });
+        }
+        else {
+          observer.next(null);
+        }
+        observer.complete();
+      }, 2000)
+    })
+  }
 }
