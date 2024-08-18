@@ -19,6 +19,9 @@ export class CounterComponent implements ControlValueAccessor {
   onChange: any;
   
   constructor() { }
+  
+  registerOnTouched(fn: any): void {
+  }
 
   writeValue(value: any): void {
     this.count = value;

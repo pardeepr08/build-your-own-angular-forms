@@ -19,7 +19,8 @@ const SELECT_MULTIPLE_VALUE_ACCESSOR: Provider  = {
     selector: "select[multiple][ngModel]",
     providers: [SELECT_MULTIPLE_VALUE_ACCESSOR],
     host: {
-        "(change)": "onChange($event.target)"
+        "(change)": "onChange($event.target)",
+        "(blur)": "onTouched()"
     }
 })
 export class SelectMultipleControlValueAccessor extends BaseControlValueAccessor implements ControlValueAccessor {    

@@ -1,8 +1,6 @@
 import {
   Directive,
-  ElementRef,
   EventEmitter,
-  HostListener,
   Inject,
   Input,
   OnChanges,
@@ -15,18 +13,14 @@ import {
   NG_VALUE_ACCESSOR,
 } from './control_value_accessor';
 import { FormControl } from '../model/FormControl';
-import { AbstractControl, INVALID, PENDING } from '../model/AbstractControl';
 import {
-  ValidatorFn,
-  ValidationErrors,
   Validator,
   NG_VALIDATORS,
   NG_ASYNC_VALIDATORS,
   AsyncValidator,
-  AsyncValidatorFn,
 } from './validators';
-import { forkJoin, from, map, merge, Observable } from 'rxjs';
 import { AbstractControlDirective } from './abstract_control_directive';
+import { FormHooks } from '../model/AbstractControl';
 
 
 @Directive({
@@ -37,6 +31,7 @@ export class NgModel extends AbstractControlDirective implements OnChanges {
   control: FormControl = new FormControl();
   @Input() required: any;
   @Input('ngModel') model: any;
+  @Input('ngModelOptions') options?: { updateOn: FormHooks }
   @Output('ngModelChange') update = new EventEmitter();
   valueAccessor: ControlValueAccessor;
   registerd: boolean = false;
@@ -55,15 +50,31 @@ export class NgModel extends AbstractControlDirective implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (!this.registerd) {
       this.setUpViewChangePipeLine();
+      this.setUpBlurPipeLine();
       this.setUpFormControl();
+      this.registerd = true;
     }
     this.updateValue(this.model);
   }
 
   setUpViewChangePipeLine() {
     this.valueAccessor.registerOnChange((value: string) => {
-      this.update.emit(value);
-      this.control.setValue(value);
+      this.control._pendingValue = value;
+      this.control._pendingChange = true;
+      if (this.control.updateOn === 'change') {
+        this.update.emit(value);
+        this.control.setValue(value);
+      }
+    });
+    this.registerd = true;
+  }
+
+  setUpBlurPipeLine() {
+    this.valueAccessor.registerOnTouched(() => {
+      if (this.control.updateOn === 'blur' && this.control._pendingChange) {
+        this.update.emit(this.control._pendingValue);
+        this.control.setValue(this.control._pendingValue);
+      }
     });
     this.registerd = true;
   }
@@ -74,6 +85,9 @@ export class NgModel extends AbstractControlDirective implements OnChanges {
     }
     if (this.asyncValidators) {
       this.control.setAsyncValidator(this.asyncValidators);
+    }
+    if (this.options?.updateOn) {
+      this.control._updateOn = this.options.updateOn;
     }
   }
 

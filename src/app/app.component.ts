@@ -79,9 +79,9 @@ export class ForbiddenNames implements AsyncValidator {
     return new Promise(resolve => {
       setTimeout(() => {
         if (control.value === 'tom') {
-          return resolve({ forbiddenNames: true });
+          resolve({ forbiddenNames: true });
         }
-        return resolve(null);
+        resolve(null);
       }, 2000)
     })
   }

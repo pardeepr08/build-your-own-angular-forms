@@ -3,6 +3,7 @@ import { Directive, ElementRef, InjectionToken, Renderer2 } from "@angular/core"
 export interface ControlValueAccessor {
     writeValue(obj: any): void;
     registerOnChange(fn: any): void;
+    registerOnTouched(fn: any): void;
 }
 
 
@@ -13,8 +14,14 @@ export class BaseControlValueAccessor {
 
     }
 
+    onTouched = () => {}
+
     registerOnChange(fn: (_: any) => void) {
         this.onChange = fn
+    }
+
+    registerOnTouched(fn: () => void) {
+        this.onTouched = fn
     }
 
     setProperty(key: string, value: string): void {

@@ -8,7 +8,10 @@ const CHECKBOX_VALUE_ACCESSOR: Provider  = {
 
 @Directive({
     selector: "input([type=checkbox])[ngModel]",
-    providers: [CHECKBOX_VALUE_ACCESSOR]
+    providers: [CHECKBOX_VALUE_ACCESSOR],
+    host: {
+        '(blur)': 'onTouched()'
+    }
 })
 export class CheckboxControlValueAccessor extends BaseControlValueAccessor implements ControlValueAccessor {    
     writeValue(value: string): void {

@@ -8,7 +8,10 @@ const DEFAULT_VALUE_ACCESSOR: Provider  = {
 
 @Directive({
     selector: "input:not([type=checkbox])[ngModel]",
-    providers: [DEFAULT_VALUE_ACCESSOR]
+    providers: [DEFAULT_VALUE_ACCESSOR],
+    host: {
+        '(blur)': 'onTouched()'
+    }
 })
 export class DefaultControlValueAccessor extends BaseControlValueAccessor implements ControlValueAccessor {    
     writeValue(value: string): void {

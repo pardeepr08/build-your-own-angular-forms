@@ -2,6 +2,7 @@ import { Observable } from "rxjs";
 import { AsyncValidatorFn, ValidationErrors, ValidatorFn } from "../directives/validators";
 
 export type FormControlStatus = 'VALID'|'INVALID'|'PENDING'
+export type FormHooks = 'change'|'blur';
 
 
 export const VALID = 'VALID';
@@ -13,6 +14,7 @@ export abstract class AbstractControl<TValue = any> {
     value!: TValue;
     status: FormControlStatus = VALID;
     errors: ValidationErrors|null = null;
+    _updateOn!: FormHooks;
     private _validtorFn: ValidatorFn|null = null;
     private _asyncValidtorFn: AsyncValidatorFn|null = null;
 
@@ -50,6 +52,10 @@ export abstract class AbstractControl<TValue = any> {
         if (this.status === VALID) {
             this._runAsyncValidators();
         }
+    }
+
+    get updateOn() {
+        return this._updateOn ? this._updateOn : 'change';
     }
 
     abstract setValue(value: TValue): void
